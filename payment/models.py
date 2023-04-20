@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 class Currency(models.Model):
-    name = models.CharField(blank=True, max_length=45)
-    code = models.CharField(blank=True, max_length=45, unique=True)
+    name = models.CharField(max_length=45)
+    code = models.CharField(max_length=45, unique=True)
     created_date = models.DateField(auto_now_add=True)
 
     def __str__(self):
@@ -14,8 +14,10 @@ class Currency(models.Model):
 class Payment(models.Model):
     user = models.ForeignKey(
         User, related_name='payment', on_delete=models.CASCADE)
-    reference_code = models.CharField(blank=True, max_length=45, unique=True)
+    reference_code = models.CharField(max_length=45, unique=True)
     amount = models.FloatField()
     currency = models.ForeignKey(
         Currency, related_name='payment', on_delete=models.CASCADE)
+    is_paid = models.BooleanField(default=False)
+    paid_date = models.DateField(null=True, blank=True)
     created_date = models.DateField(auto_now_add=True)
