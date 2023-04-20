@@ -8,6 +8,8 @@ from rest_framework import serializers
 
 
 class PaymentSerializer(serializers.ModelSerializer):
+    currency_code = serializers.CharField(source='currency')
+    username = serializers.CharField(source='user')
 
     @staticmethod
     def get_total_amount(user, currency, amount):
