@@ -32,6 +32,13 @@ class PaymentSerializer(serializers.ModelSerializer):
 
         return attrs
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['is_paid'] = instance.is_paid
+        data['date_paid'] = instance.paid_date
+
+        return data
+
     class Meta:
         model = Payment
         exclude = ('is_paid', 'paid_date', )
