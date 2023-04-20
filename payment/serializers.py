@@ -8,8 +8,8 @@ from rest_framework import serializers
 
 
 class PaymentSerializer(serializers.ModelSerializer):
-    currency_code = serializers.CharField(source='currency')
-    username = serializers.CharField(source='user')
+    currency_code = serializers.CharField(source='currency', read_only=True)
+    username = serializers.CharField(source='user', read_only=True)
 
     @staticmethod
     def get_total_amount(user, currency, amount):
@@ -19,6 +19,9 @@ class PaymentSerializer(serializers.ModelSerializer):
             user=user, currency=currency, created_date=now).aggregate(
             total=Sum('amount'))['total']
 
+        if total is None:
+            total = 0
+
         return total + amount
 
     def validate(self, attrs):
@@ -27,11 +30,11 @@ class PaymentSerializer(serializers.ModelSerializer):
         if total >  DAILY_LIMIT:
             raise serializers.ValidationError('5000 daily limit reached')
 
-        super().validate(attrs)
+        return attrs
 
     class Meta:
         model = Payment
-        fields = '__all__'
+        exclude = ('is_paid', 'paid_date', )
 
 
 class PaySerializer(serializers.ModelSerializer):
@@ -42,3 +45,12 @@ class PaySerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         validated_data['paid_date'] = timezone.now().date()
         return super().update(instance, validated_data)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['amount'] = instance.amount
+        data['user'] = instance.user.username
+        data['currency_code'] = instance.currency.code
+
+        return data
+
