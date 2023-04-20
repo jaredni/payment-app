@@ -13,20 +13,22 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_total_amount(user, currency, amount):
-        now = timezone.now().date()
+        date_now = timezone.now().date()
 
         total = Payment.objects.filter(
-            user=user, currency=currency, created_date=now).aggregate(
+            user=user.pk, currency=currency.pk,
+            created_date__icontains=date_now).aggregate(
             total=Sum('amount'))['total']
 
         if total is None:
             total = 0
-
         return total + amount
 
     def validate(self, attrs):
+        request = self.context['request']
         total = self.get_total_amount(
-            attrs.get('user'), attrs.get('currency'), attrs.get('amount'))
+            request.user, attrs.get('currency'), attrs.get('amount'))
+
         if total >  DAILY_LIMIT:
             raise serializers.ValidationError('5000 daily limit reached')
 
@@ -41,7 +43,7 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Payment
-        exclude = ('is_paid', 'paid_date', )
+        exclude = ('is_paid', 'paid_date', 'user')
 
 
 class PaySerializer(serializers.ModelSerializer):
