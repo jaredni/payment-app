@@ -47,9 +47,6 @@ class PaymentSerializer(serializers.ModelSerializer):
 
 
 class PaySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Payment
-        fields = ['id', 'is_paid']
 
     def update(self, instance, validated_data):
         validated_data['paid_date'] = timezone.now().date()
@@ -63,3 +60,6 @@ class PaySerializer(serializers.ModelSerializer):
 
         return data
 
+    class Meta:
+        model = Payment
+        fields = ['id', 'is_paid']
