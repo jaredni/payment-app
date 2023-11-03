@@ -11,6 +11,8 @@ class Currency(models.Model):
     def __str__(self):
         return self.code
 
+
+
 class Payment(models.Model):
     user = models.ForeignKey(
         User, related_name='payment', on_delete=models.CASCADE)
