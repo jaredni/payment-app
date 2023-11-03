@@ -18,6 +18,7 @@ class Currency(models.Model):
 
 
 
+
 class Payment(models.Model):
     user = models.ForeignKey(
         User, related_name='payment', on_delete=models.CASCADE)
