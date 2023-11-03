@@ -11,10 +11,10 @@ from rest_framework.permissions import IsAuthenticated
 class PaymentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Payment.objects.all()
-    http_method_names = ['get', 'post']
+    http_method_names = ["get", "post"]
     serializer_class = PaymentSerializer
     filter_backends = [filters.DjangoFilterBackend]
-    filterset_fields = ['currency', 'reference_code']
+    filterset_fields = ["currency", "reference_code"]
 
     def get_queryset(self):
         current_user = self.request.user
@@ -26,8 +26,8 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
 class PayViewSet(viewsets.ModelViewSet):
     permission_classes = [IsOwner]
-    queryset = Payment.objects.select_related('user', 'currency').all()
-    http_method_names = ['get', 'put']
+    queryset = Payment.objects.select_related("user", "currency").all()
+    http_method_names = ["get", "put"]
     serializer_class = PaySerializer
 
     def list(self, request, *args, **kwargs):
