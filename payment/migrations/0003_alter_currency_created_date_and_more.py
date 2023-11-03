@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('payment', '0002_payment_is_paid_payment_paid_date_and_more'),
+        ("payment", "0002_payment_is_paid_payment_paid_date_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='currency',
-            name='created_date',
+            model_name="currency",
+            name="created_date",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='payment',
-            name='created_date',
+            model_name="payment",
+            name="created_date",
             field=models.DateTimeField(auto_now_add=True),
         ),
     ]
