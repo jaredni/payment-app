@@ -3,3 +3,4 @@ psycopg2-binary>=2.8
 djangorestframework==3.14
 django-filter==23.1
 black==23.10.1
+isort==5.12.0

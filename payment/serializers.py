@@ -1,10 +1,9 @@
 from django.db.models import Sum
 from django.utils import timezone
+from rest_framework import serializers
 
 from payment.constants import DAILY_LIMIT
 from payment.models import Payment
-
-from rest_framework import serializers
 
 
 class PaymentSerializer(serializers.ModelSerializer):
